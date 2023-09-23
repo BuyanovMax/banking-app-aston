@@ -26,7 +26,7 @@ TransferRequest {
     @Pattern(regexp = "\\d{4}", message = "the pin must consist of 4 digits")
     private String pin;
 
-    @Schema(description = "Must be positive. Can't exceed the current balance of source account", example = "50")
+    @Schema(description = "Must be positive. Can't exceed the current balance of source account", example = "50.00")
     @Positive
     private long currencyAmount;
 }

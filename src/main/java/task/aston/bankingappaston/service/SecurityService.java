@@ -10,13 +10,17 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class SecurityService {
     private PasswordEncoder encoder;
-
+    /**
+     * pin verification
+     */
     public void verifyPin(String pin, String correct) {
         if (!encoder.matches(pin, correct)) {
             throw new WrongPinException();
         }
     }
-
+    /**
+     * encode PIN code
+     */
     public String encodePin(String pin) {
         return encoder.encode(pin);
     }

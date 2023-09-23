@@ -1,18 +1,18 @@
 package task.aston.bankingappaston.service;
 
-import task.aston.bankingappaston.exceptions.AccountNotFoundException;
-import task.aston.bankingappaston.exceptions.NameTakenException;
-import task.aston.bankingappaston.exceptions.NotEnoughFundsException;
-import task.aston.bankingappaston.exceptions.UnexpectedIdMatchingException;
-import task.aston.bankingappaston.mapper.Mapper;
-import task.aston.bankingappaston.pojo.entity.Account;
-import task.aston.bankingappaston.repository.AccountRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import task.aston.bankingappaston.exceptions.AccountNotFoundException;
+import task.aston.bankingappaston.exceptions.NameTakenException;
+import task.aston.bankingappaston.exceptions.NotEnoughFundsException;
+import task.aston.bankingappaston.exceptions.UnexpectedIdMatchingException;
+import task.aston.bankingappaston.mapper.Mapper;
 import task.aston.bankingappaston.pojo.dto.*;
+import task.aston.bankingappaston.pojo.entity.Account;
+import task.aston.bankingappaston.repository.AccountRepository;
 
 import java.util.List;
 
@@ -22,7 +22,9 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final Mapper mapper;
     private final SecurityService securityService;
-
+    /**
+     * creating an account
+     */
     @Transactional
     public CreatedAccountDto createAccount(NewAccountDto newAccountDto) {
         String name = newAccountDto.getName();
@@ -35,7 +37,9 @@ public class AccountService {
         accountRepository.save(account);
         return mapper.createdFromAccount(account);
     }
-
+    /**
+     * display all accounts page by page
+     */
     @Transactional(readOnly = true)
     public AccountsPageDto getAccounts(int pageNumber, int pageSize) {
         Pageable page = PageRequest.of(pageNumber, pageSize);
@@ -43,7 +47,9 @@ public class AccountService {
         List<AccountNameBalanceDto> list = accountRepository.getPageOfNameBalanceDto(page);
         return new AccountsPageDto(totalAmount, list);
     }
-
+    /**
+     * top up your account
+     */
     @Transactional
     public AccountNameBalanceDto deposit(DepositRequest depositRequest) {
         long toAccountId = depositRequest.getToAccountId();
@@ -53,7 +59,9 @@ public class AccountService {
         accountRepository.save(account);
         return mapper.nameBalanceFromAccount(account);
     }
-
+    /**
+     * withdraw from the account
+     */
     @Transactional
     public AccountNameBalanceDto withdraw(WithdrawRequest withdrawRequest) {
         Account account = accountRepository.findById(withdrawRequest.getFromAccountId())
@@ -68,7 +76,9 @@ public class AccountService {
         accountRepository.save(account);
         return mapper.nameBalanceFromAccount(account);
     }
-
+    /**
+     * transferring money from one account to another
+     */
     @Transactional
     public void transfer(TransferRequest transferRequest) {
         if (transferRequest.getFromAccountId() == transferRequest.getToAccountId()) {

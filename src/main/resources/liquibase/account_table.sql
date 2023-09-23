@@ -6,5 +6,5 @@ create table account
     id BIGSERIAL primary key ,
     name varchar(50) unique not null ,
     pin varchar(100) not null ,
-    balance BIGINT default 0
+    balance BigInt default 0
 );

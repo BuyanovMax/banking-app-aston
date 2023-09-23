@@ -24,11 +24,11 @@ public class Account {
     @Column(name = "balance")
     private long balance;
 
-    public void deposit(double currencyValue) {
+    public void deposit(long currencyValue) {
         balance += currencyValue;
     }
 
-    public void withdraw(double currencyValue) {
+    public void withdraw(long currencyValue) {
         balance -= currencyValue;
     }
 }

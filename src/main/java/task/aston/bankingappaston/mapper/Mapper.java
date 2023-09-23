@@ -4,7 +4,6 @@ import task.aston.bankingappaston.pojo.dto.*;
 import task.aston.bankingappaston.pojo.entity.Account;
 import org.mapstruct.MappingConstants;
 
-
 @org.mapstruct.Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface Mapper {
     Account toAccount(NewAccountDto newAccountDto);
