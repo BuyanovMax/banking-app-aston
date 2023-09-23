@@ -1,6 +1,6 @@
 # Banking-app-aston
 
-Application allows to manage bank accounts (create account, deposit/withdraw/transfer funds) via validated REST requests.
+Application allows to manage bank accounts.
 Pin-codes are hashed before being put in the database.
 
 ## Technologies (17 in total)
