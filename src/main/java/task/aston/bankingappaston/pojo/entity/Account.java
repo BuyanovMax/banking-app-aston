@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
-@DynamicUpdate
 @Table(name = "account")
 @Data
 @NoArgsConstructor
