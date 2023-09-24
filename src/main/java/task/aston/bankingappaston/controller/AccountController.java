@@ -1,4 +1,7 @@
 package task.aston.bankingappaston.controller;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import org.springframework.validation.annotation.Validated;
 import task.aston.bankingappaston.pojo.dto.*;
 import task.aston.bankingappaston.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,14 +15,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-
+@Validated
 @RestController
 @AllArgsConstructor
 @RequestMapping("/account")
 @Tag(name = "Account", description = "The Account API")
 public class AccountController {
-    private AccountService accountService;
+    private final AccountService accountService;
 
     @Operation(summary = "Create new account")
     @ApiResponses(value = {
@@ -29,7 +31,7 @@ public class AccountController {
             @ApiResponse(responseCode = "500", description = "Server error", content = @Content(schema = @Schema(hidden = true)))
     })
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping()
     public CreatedAccountDto createAccount(@Valid @RequestBody NewAccountDto newAccountDto) {
         return accountService.createAccount(newAccountDto);
     }
@@ -41,8 +43,8 @@ public class AccountController {
             @ApiResponse(responseCode = "500", description = "Server error", content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping
-    public AccountsPageDto accountsPage(@RequestParam(name = "pageNumber") int pageNumber,
-                                        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+    public AccountsPageDto accountsPage(@PositiveOrZero @RequestParam(name = "pageNumber") int pageNumber,
+                                        @Positive @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
         return accountService.getAccounts(pageNumber, pageSize);
     }
 
@@ -54,7 +56,7 @@ public class AccountController {
             @ApiResponse(responseCode = "404", description = "Account not found", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "500", description = "Server error", content = @Content(schema = @Schema(hidden = true)))
     })
-    @PostMapping(path = "/withdraw", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/withdraw")
     public AccountNameBalanceDto transfer(@Valid @RequestBody WithdrawRequest withdrawRequest) {
         return accountService.withdraw(withdrawRequest);
     }
@@ -66,7 +68,7 @@ public class AccountController {
             @ApiResponse(responseCode = "404", description = "Account not found", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "500", description = "Server error", content = @Content(schema = @Schema(hidden = true)))
     })
-    @PostMapping(path = "/deposit", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/deposit")
     public AccountNameBalanceDto transfer(@Valid @RequestBody DepositRequest depositRequest) {
         return accountService.deposit(depositRequest);
     }
@@ -80,7 +82,7 @@ public class AccountController {
             @ApiResponse(responseCode = "409", description = "Source and goal id are equal"),
             @ApiResponse(responseCode = "500", description = "Server error")
     })
-    @PostMapping(path = "/transfer", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/transfer")
     public void transfer(@Valid @RequestBody TransferRequest transferRequest) {
         accountService.transfer(transferRequest);
     }
